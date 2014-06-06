@@ -1,27 +1,13 @@
 package com.tpv.xmic.gallery_sourcelist;
 
-/*
- * Copyright (C) 2007 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,31 +17,62 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChanelGallery extends Activity {
-	private int		mSelectedPosition;
-	private int		mItemSize;
-	private Gallery	mGallery;
-	private Handler	mHandler;
-	private boolean	mLongPressFlag	= false;
+public class ChanelGallery extends Activity implements OnCheckedChangeListener {
+	private int				mSelectedPosition;
+	private int				mItemSize		= 0;
+	private Gallery			mGallery;
+	private Handler			mHandler;
+	private boolean			mLongPressFlag	= false;
+	// CheckBox模拟信号源检测
+	private CheckBox		mCheckBox1, mCheckBox2, mCheckBox3, mCheckBox4, mCheckBox5, mCheckBox6, mCheckBox7;
+	private CheckBox[]		arrCheckBox		= { mCheckBox1, mCheckBox2, mCheckBox3, mCheckBox4, mCheckBox5, mCheckBox6, mCheckBox7, };
+	private int[]			arrCheckBoxId	= { R.id.s1, R.id.s2, R.id.s3, R.id.s4, R.id.s5, R.id.s6, R.id.s7, };
+	private final Integer[]	mImageIds		= { R.drawable.g1, R.drawable.g2, R.drawable.g3, R.drawable.g4, R.drawable.g5, R.drawable.g6,
+			R.drawable.g7,					};
+	private final int[]		mTextString		= { R.string.s1, R.string.s2, R.string.s3, R.string.s4, R.string.s5, R.string.s6, R.string.s7 };
+	private ImageAdapter	mAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery_layout);
+
+		intiComponet();
+
+	}
+
+	private void intiComponet() {
+		getViewRefrence();
+		registListener(mAdapter);
+		mItemSize = findSignal().size();
+		mAdapter.notifyDataSetChanged();
+	}
+
+	private void getViewRefrence() {
 		// Set the adapter to our custom adapter (below)
-		final ImageAdapter adapter = new ImageAdapter(this);
+		mAdapter = new ImageAdapter(this);
 		// Reference the Gallery view
 		mGallery = (Gallery) findViewById(R.id.gallery);
-		mGallery.setAdapter(adapter);
-		// mGallery.setSpacing(5);
+		mGallery.setAdapter(mAdapter);
+		mGallery.setSpacing(5);
 
-		mItemSize = mGallery.getCount();
+		for (int i = 0; i < arrCheckBox.length; i++) {
+			arrCheckBox[i] = (CheckBox) this.findViewById(arrCheckBoxId[i]);
+			arrCheckBox[i].setChecked(true);
+		}
+	}
+
+	private void registListener(final ImageAdapter adapter) {
 		mHandler = new Handler();
-
 		/*
 		 * Set a item click listener, and just Toast the clicked position
 		 */
@@ -123,6 +140,11 @@ public class ChanelGallery extends Activity {
 		// gallery. 注册上下文菜单
 		// registerForContextMenu(mGallery);
 
+		// 模拟信号源
+		for (int i = 0; i < arrCheckBox.length; i++) {
+			arrCheckBox[i].setOnCheckedChangeListener(this);
+		}
+
 	}
 
 	// // 添加上下文菜单
@@ -149,11 +171,12 @@ public class ChanelGallery extends Activity {
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// 上方向键显示菜单
-		if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-			new AlertDialog.Builder(ChanelGallery.this).setSingleChoiceItems(new String[] { "menu 1", "menu 2", "menu 3" }, 0, null).show();
-
-		}
+		// // 上方向键显示菜单
+		// if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+		// new AlertDialog.Builder(ChanelGallery.this).setSingleChoiceItems(new
+		// String[] { "menu 1", "menu 2", "menu 3" }, 0, null).show();
+		//
+		// }
 		// // 右方向键到头时循环跳到第一个item
 		// if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 		// if (mSelectedPosition == mItemSize - 1) {
@@ -166,7 +189,8 @@ public class ChanelGallery extends Activity {
 		// mGallery.setSelection(mItemSize - 1, false);
 		// }
 		// }
-		return true;
+		return super.onKeyDown(keyCode, event);
+
 	}
 
 	/**
@@ -179,13 +203,10 @@ public class ChanelGallery extends Activity {
 		// int mGalleryItemBackground;
 		int						mPosition;
 		private final Context	mContext;
+
 		/*
 		 * item 资源文件id
 		 */
-		private final Integer[]	mImageIds	= { R.drawable.g1, R.drawable.g2, R.drawable.g3, R.drawable.g4, R.drawable.g5, R.drawable.g6,
-													R.drawable.g7,
-
-											};
 
 		public ImageAdapter(Context c) {
 			mContext = c;
@@ -200,29 +221,34 @@ public class ChanelGallery extends Activity {
 
 		@Override
 		public int getCount() {
-			return mImageIds.length;
+			Log.i("getCount", "getCount" + mItemSize);
+			return mItemSize;
+
 		}
 
 		@Override
 		public Object getItem(int position) {
+			Log.i("getItem", "getItem" + position);
 			return position;
 		}
 
 		@Override
 		public long getItemId(int position) {
+			Log.i("getItemId", "getItemId" + position);
 			return position;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			Log.i("getView", "getView" + position);
 			int wigth;
 			int height;
 			int scaleValue = 40;// 放大值
-			View view = View.inflate(mContext, R.layout.item, null);
+			RelativeLayout view = (RelativeLayout) View.inflate(mContext, R.layout.item, null);
 			ImageView itemImgView = (ImageView) view.findViewById(R.id.item_img);
-			// ImageView itemImgView = new ImageView(mContext);//
-			// itemImgView.setImageResource(mImageIds[position]);
-			// itemImgView.setScaleType(ImageView.ScaleType.FIT_XY);
+			TextView textView = (TextView) view.findViewById(R.id.signal_text);
+			textView.setText(getResources().getString(mTextString[position]));
+
 			LayoutParams lay = itemImgView.getLayoutParams();
 			wigth = lay.width;
 			height = lay.height;
@@ -234,8 +260,11 @@ public class ChanelGallery extends Activity {
 
 			// The preferred Gallery item background
 			// itemImgView.setBackgroundResource(mGalleryItemBackground);
-			itemImgView.setBackgroundResource(mImageIds[position]);
-			
+			SparseIntArray ItemArray = findSignal();
+			int signal = ItemArray.get(position);
+			textView.setText(getResources().getString(mTextString[signal]));
+			itemImgView.setBackgroundResource(mImageIds[signal]);
+
 			return itemImgView;
 		}
 
@@ -245,6 +274,43 @@ public class ChanelGallery extends Activity {
 		public void myNotifiData(int position) {
 			mPosition = position;
 			this.notifyDataSetChanged();
+		}
+
+	}
+
+	private SparseIntArray findSignal() {
+
+		SparseIntArray intArray = new SparseIntArray();
+		intArray.clear();
+		int j = 0;// 有序号
+		int i;// 信号源
+		for (i = 0; i < arrCheckBox.length; i++) {
+			if (arrCheckBox[i].isChecked()) {
+				intArray.append(j, i);
+				j++;
+			}
+		}
+		return intArray;
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		// TODO Auto-generated method stub
+		int id = buttonView.getId();
+		switch (id) {
+		case R.id.s1:
+		case R.id.s2:
+		case R.id.s3:
+		case R.id.s4:
+		case R.id.s5:
+		case R.id.s6:
+		case R.id.s7:
+			mItemSize = findSignal().size();
+			mAdapter.notifyDataSetChanged();
+			break;
+
+		default:
+			break;
 		}
 	}
 

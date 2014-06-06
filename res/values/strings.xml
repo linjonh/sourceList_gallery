@@ -1,6 +1,15 @@
 <resources>
 
-    <string name="app_name">GalleryScale</string>
+    <string name="app_name">sourselist</string>
     <string name="gallery_2_text">Testing</string>
-
+	<string name="rename_text">重新命名</string>
+	<string name="set_homepage_text">设为开机执行首页</string>
+	<string name="rest_text">返回预设值</string>
+	<string name="s1">信号源1</string>
+	<string name="s2">信号源2</string>
+	<string name="s3">信号源3</string>
+	<string name="s4">信号源4</string>
+	<string name="s5">信号源5</string>
+	<string name="s6">信号源6</string>
+	<string name="s7">信号源7</string>
 </resources>

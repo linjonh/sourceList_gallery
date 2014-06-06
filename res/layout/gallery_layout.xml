@@ -21,7 +21,71 @@
     <Gallery
         android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+       android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
 
+        <CheckBox
+            android:id="@+id/s1"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s1" />
+
+        <CheckBox
+            android:id="@+id/s2"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s2" >         
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/s3"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s3" />
+
+        <CheckBox
+            android:id="@+id/s4"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s4" />
+
+        <CheckBox
+            android:id="@+id/s5"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s5" />
+
+        <CheckBox
+            android:id="@+id/s6"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s6" />
+
+        <CheckBox
+            android:id="@+id/s7"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/selector"
+            android:text="@string/s7" />
+    </LinearLayout>
 </RelativeLayout>
